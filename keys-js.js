@@ -3,7 +3,7 @@
 
 // Format: 'custom-key': 'actual-gemini-api-key'
 const keyMappings = {
-    'key123': 'AIzaSyBJi5Gj5fHODjMgPMGI84doMS7jUFiueo8',
+    'key123': 'AIzaSyCq709_hPDJcbbOu1GFeT9AaUzDTT_5pFM',
     'key456': 'AIzaSyBtC9RmO2tSMmDvLcNnHxbeBQRZB-w1a5M',
     'tuankey': 'AIzaSyCnHbPzCFnGv8OVkwfv_XhL0W1Z1XUvN80',
     'admin2025': 'AIzaSyDcZJGxON7PTUaMNGmJB5zUXYJapbSvaw4'
