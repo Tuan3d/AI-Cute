@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Thêm meta tag để ngăn cache -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -77,19 +76,15 @@
     </div>
 
     <script>
-        // Thêm timestamp vào URL của CSS và JS để tránh cache
         const timestamp = new Date().getTime();
         
-        // Cập nhật link CSS
         const cssLink = document.getElementById('css-link');
         cssLink.href = `style-css.css?t=${timestamp}`;
         
-        // Tạo và thêm script keys-js.js
         const keysScript = document.createElement('script');
         keysScript.src = `keys-js.js?t=${timestamp}`;
         document.body.appendChild(keysScript);
         
-        // Tạo và thêm script script-js.js
         const mainScript = document.createElement('script');
         mainScript.src = `script-js.js?t=${timestamp}`;
         document.body.appendChild(mainScript);
