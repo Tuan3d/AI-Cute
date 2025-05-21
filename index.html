@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Thêm meta tag để ngăn cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Công Cụ Lách Đạo Văn</title>
-    <link rel="stylesheet" href="style-css.css">
+    <link rel="stylesheet" id="css-link" href="style-css.css">
 </head>
 <body>
     <div class="container">
@@ -72,7 +76,23 @@
         <div class="ad-message">Cảm ơn bạn đã sử dụng!</div>
     </div>
 
-    <script src="keys-js.js"></script>
-    <script src="script-js.js"></script>
+    <script>
+        // Thêm timestamp vào URL của CSS và JS để tránh cache
+        const timestamp = new Date().getTime();
+        
+        // Cập nhật link CSS
+        const cssLink = document.getElementById('css-link');
+        cssLink.href = `style-css.css?t=${timestamp}`;
+        
+        // Tạo và thêm script keys-js.js
+        const keysScript = document.createElement('script');
+        keysScript.src = `keys-js.js?t=${timestamp}`;
+        document.body.appendChild(keysScript);
+        
+        // Tạo và thêm script script-js.js
+        const mainScript = document.createElement('script');
+        mainScript.src = `script-js.js?t=${timestamp}`;
+        document.body.appendChild(mainScript);
+    </script>
 </body>
 </html>
