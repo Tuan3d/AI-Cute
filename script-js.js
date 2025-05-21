@@ -24,11 +24,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultContent = document.getElementById('result-content');
     const spinnerOverlay = document.getElementById('spinner-overlay');
     const copyBtn = document.getElementById('copy-btn');
+    const zaloBtn = document.getElementById('zalo-btn');
     const telegramBtn = document.getElementById('telegram-btn');
+    const telegramModal = document.getElementById('telegram-modal');
+    const closeBtn = document.getElementById('close-btn');
+    
+    // Zalo button click event
+    zaloBtn.addEventListener('click', function() {
+        window.location.href = 'http://zaloapp.com/qr/p/ea01xbpy2ftt';
+    });
     
     // Telegram button click event
     telegramBtn.addEventListener('click', function() {
-        alert("sdt: 0375320865");
+        telegramModal.style.display = 'flex';
+    });
+    
+    // Close button click event
+    closeBtn.addEventListener('click', function() {
+        telegramModal.style.display = 'none';
     });
     
     // Rewrite button click event
