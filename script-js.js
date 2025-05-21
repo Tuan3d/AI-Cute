@@ -1,4 +1,3 @@
-```javascript
 document.addEventListener('DOMContentLoaded', function() {
     // Toggle key visibility
     const showKeyToggle = document.getElementById('show-key');
@@ -148,7 +147,7 @@ Hãy cung cấp đoạn văn bản đã được viết lại mà không giải 
             });
             
             if (!response.ok) {
-                throw new Error(`Lỗi : ${response.status} ${response.statusText}`);
+                throw new Error(`Lỗi: ${response.status} ${response.statusText}`);
             }
             
             const data = await response.json();
@@ -160,107 +159,10 @@ Hãy cung cấp đoạn văn bản đã được viết lại mà không giải 
                 
                 return data.candidates[0].content.parts[0].text;
             } else {
-                throw new Error('Không nhận được phản hồi hợp lệ ');
+                throw new Error('Không nhận được phản hồi hợp lệ');
             }
         } catch (error) {
-            throw new Error(`Lỗi kết nối : ${error.message}`);
+            throw new Error(`Lỗi kết nối: ${error.message}`);
         }
     }
 });
-```
-
-### File: `style-css.css`
-Thêm các kiểu CSS cho modal thông báo vào cuối file:
-
-<xaiArtifact artifact_id="293cf325-4eba-4f69-82ec-1bf0f1b6e417" artifact_version_id="ab9bd488-2969-4430-a0e4-0151427595a3" title="style-css.css" contentType="text/css">
-```css
-/* Alert Modal Styles */
-.alert-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.alert-content {
-    background-color: #0A3D62;
-    padding: 1.5rem;
-    border-radius: 10px;
-    text-align: center;
-    color: var(--text-color);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    max-width: 300px;
-    width: 90%;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.alert-content p {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-}
-
-.alert-close-btn {
-    background-color: #8B0000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.alert-close-btn:hover {
-    background-color: #A52A2A;
-}
-
-/* Animation for alert modal */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Responsive styles for alert modal */
-@media (max-width: 480px) {
-    .alert-content {
-        padding: 1rem;
-        max-width: 250px;
-    }
-    
-    .alert-content p {
-        font-size: 1rem;
-    }
-    
-    .alert-close-btn {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
-    }
-}
-```
-
-### Giải thích thay đổi:
-1. **Hàm `showAlert`:** Được thêm vào `script-js.js` để tạo modal thông báo động với nội dung tùy chỉnh. Modal này được thêm vào DOM khi cần và xóa khi người dùng nhấn nút "Đóng".
-2. **Kiểm tra key không hợp lệ:** Thay `alert('Key không hợp lệ...')` bằng `showAlert('Key không hợp lệ...')` để sử dụng modal tùy chỉnh.
-3. **Kiểu dáng CSS:** Modal thông báo (`alert-modal`) sử dụng thiết kế tương tự modal Telegram (`telegram-modal`), với nền tối, màu `#0A3D62`, và nút đóng màu đỏ (`#8B0000`). Hiệu ứng `fadeIn` và kiểu dáng responsive được thêm để đồng bộ với giao diện hiện tại.
-4. **Responsive:** Kiểu dáng cho modal thông báo được tối ưu cho thiết bị di động (max-width: 480px), tương tự các thành phần khác trong `style-css.css`.
-
-### Kết quả:
-Khi người dùng nhập key không hợp lệ, một modal sẽ hiện ra với:
-- Nền mờ (rgba(0, 0, 0, 0.7)).
-- Nội dung thông báo trong hộp màu `#0A3D62`, chữ trắng, góc bo tròn.
-- Nút "Đóng" màu đỏ, có hover effect.
-- Hiệu ứng fade-in mượt mà và giao diện thân thiện trên di động.
-
-Bạn có cần kiểm tra hoặc chỉnh sửa thêm gì không?
