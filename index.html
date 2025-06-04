@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Cute - Chatbot thông minh</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #ffffff;
+            height: 100vh;
+            /* Changed overflow to auto for mobile to allow scrolling if content exceeds viewport */
+            overflow: auto; 
+        }
+
+        .container {
+            display: flex;
+            height: 100%; /* Use 100% height for flex container */
+            /* Mobile first: Column layout */
+            flex-direction: column; 
+        }
+
+        .sidebar {
+            /* Mobile: Full width, auto height, appears first */
+            width: 100%; 
+            height: auto; 
+            background: rgba(30, 30, 50, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            order: 1; 
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            gap: 10px;
+            margin-bottom: 20px; 
+            padding: 10px; 
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 10px; 
+            text-align: center;
+        }
+
+        .logo h1 {
+            font-size: 20px; 
+            font-weight: bold;
+            background: linear-gradient(45deg, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .config-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px; 
+            padding: 10px; 
+            margin-bottom: 15px; 
+        }
+
+        .config-section h3 {
+            margin-bottom: 10px; 
+            color: #4ecdc4;
+            font-size: 14px; 
+        }
+
+        .input-group {
+            margin-bottom: 10px; 
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 11px; 
+            color: #b0b0b0;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px 10px; 
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px; 
+            color: #ffffff;
+            font-size: 13px; 
+        }
+
+        .version-display {
+            background: rgba(76, 175, 80, 0.2);
+            padding: 8px; 
+            border-radius: 6px; 
+            text-align: center;
+            margin-top: 15px; 
+            font-size: 11px; 
+        }
+
+        .main-content {
+            /* Mobile: Takes remaining space, appears second */
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: rgba(20, 20, 35, 0.6);
+            backdrop-filter: blur(5px);
+            order: 2; 
+            /* Allow main content to overflow and scroll internally */
+            overflow: hidden; 
+            min-height: 0; /* Important for flex item with overflow */
+        }
+
+        .chat-header {
+            padding: 15px; 
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0; 
+        }
+
+        .chat-title {
+            font-size: 18px; 
+            font-weight: 600;
+        }
+
+        .deep-think-btn {
+            background: linear-gradient(45deg, #9c27b0, #673ab7);
+            border: none;
+            padding: 8px 15px; 
+            border-radius: 20px; 
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px; 
+            font-weight: 600;
+            font-size: 12px; 
+            transition: all 0.3s ease;
+        }
+
+        .deep-think-btn:hover {
+            transform: translateY(-1px); 
+            box-shadow: 0 3px 10px rgba(156, 39, 176, 0.4); 
+        }
+
+        .deep-think-btn.active {
+            background: linear-gradient(45deg, #4caf50, #8bc34a);
+        }
+
+        .chat-messages {
+            /* Takes up remaining space in main-content */
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px; 
+            scroll-behavior: smooth;
+            min-height: 0; /* Important for flex item with overflow */
+        }
+
+        .message {
+            margin-bottom: 15px; 
+            display: flex;
+            gap: 10px; 
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 35px; 
+            height: 35px; 
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 14px; 
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+
+        .message.ai .message-avatar {
+            background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+        }
+
+        .message-content {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 10px 15px; 
+            border-radius: 15px; 
+            max-width: 85%; 
+            position: relative;
+            font-size: 14px; 
+            word-wrap: break-word; 
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .thinking-process {
+            background: rgba(156, 39, 176, 0.1);
+            border: 1px solid rgba(156, 39, 176, 0.3);
+            border-radius: 8px; 
+            padding: 10px; 
+            margin-bottom: 10px; 
+            font-family: 'Courier New', monospace;
+            font-size: 12px; 
+            line-height: 1.5; 
+            color: #e1bee7;
+        }
+
+        .thinking-process h4 {
+            color: #9c27b0;
+            margin-bottom: 8px; 
+            font-size: 13px; 
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px; 
+            padding: 10px; 
+            margin: 8px 0; 
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px; 
+            padding-bottom: 6px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-language {
+            font-size: 11px; 
+            color: #4ecdc4;
+            font-weight: 600;
+        }
+
+        .copy-btn {
+            background: rgba(78, 205, 196, 0.2);
+            border: 1px solid #4ecdc4;
+            color: #4ecdc4;
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            cursor: pointer;
+            font-size: 11px; 
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #4ecdc4;
+            color: #000;
+        }
+
+        .code-content {
+            font-family: 'Courier New', monospace;
+            font-size: 13px; 
+            line-height: 1.4; 
+            color: #f8f8f2;
+            white-space: pre-wrap;
+        }
+
+        .chat-input {
+            /* Mobile: Appears last */
+            padding: 15px; 
+            background: rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            order: 3; 
+            flex-shrink: 0; 
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px; 
+            align-items: flex-end;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 10px 15px; 
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px; 
+            color: #ffffff;
+            font-size: 14px; 
+            resize: none;
+            min-height: 40px; 
+            max-height: 100px; 
+            line-height: 1.4; 
+        }
+
+        #messageInput:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            box-shadow: 0 0 8px rgba(78, 205, 196, 0.3); 
+        }
+
+        .send-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            padding: 0 20px; /* Adjusted padding for height */
+            border-radius: 20px; 
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content */
+            gap: 6px; 
+            font-size: 13px; 
+            height: 40px; /* Match input height */
+        }
+
+        .send-btn:hover {
+            transform: translateY(-1px); 
+            box-shadow: 0 3px 10px rgba(78, 205, 196, 0.4); 
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px; 
+            height: 16px; 
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .api-status {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px; 
+            padding: 8px; 
+            margin-bottom: 10px; 
+            font-size: 11px; 
+        }
+
+        .api-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0; 
+        }
+
+        .api-status-indicator {
+            width: 7px; 
+            height: 7px; 
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .api-active { background: #4caf50; }
+        .api-failed { background: #f44336; }
+        .api-unused { background: #9e9e9e; }
+
+        /* Desktop Styles - Apply when screen width is 768px or more */
+        @media (min-width: 768px) {
+            body {
+                overflow: hidden; /* Revert to hidden on desktop */
+            }
+            .container {
+                flex-direction: row; /* Row layout on desktop */
+                height: 100vh; /* Ensure container takes full viewport height */
+            }
+            .sidebar {
+                width: 280px; /* Fixed width on desktop */
+                height: 100%; /* Full height */
+                border-right: 1px solid rgba(255, 255, 255, 0.1); /* Right border */
+                border-bottom: none; /* Remove bottom border */
+                padding: 20px; /* Revert padding */
+                order: 1; /* Keep order */
+            }
+            .logo {
+                 margin-bottom: 30px; /* Revert margin */
+                 padding: 15px; /* Revert padding */
+                 border-radius: 15px; /* Revert radius */
+            }
+            .logo h1 {
+                font-size: 24px; /* Revert font size */
+            }
+             .config-section {
+                border-radius: 10px; /* Revert radius */
+                padding: 15px; /* Revert padding */
+                margin-bottom: 20px; /* Revert margin */
+            }
+            .config-section h3 {
+                margin-bottom: 15px; /* Revert margin */
+                font-size: 16px; /* Revert font size */
+            }
+            .input-group {
+                margin-bottom: 15px; /* Revert margin */
+            }
+            .input-group label {
+                font-size: 12px; /* Revert font size */
+            }
+            .input-group input {
+                padding: 8px 12px; /* Revert padding */
+                border-radius: 6px; /* Revert radius */
+                font-size: 14px; /* Revert font size */
+            }
+            .version-display {
+                padding: 10px; /* Revert padding */
+                border-radius: 8px; /* Revert radius */
+                margin-top: auto; /* Revert margin */
+                font-size: 12px; /* Revert font size */
+            }
+            .main-content {
+                order: 2; /* Keep order */
+                height: 100%; /* Full height */
+                flex: 1; /* Allow main content to take remaining space */
+                min-width: 0; /* Important for flex item */
+            }
+            .chat-header {
+                padding: 20px; /* Revert padding */
+            }
+            .chat-title {
+                font-size: 20px; /* Revert font size */
+            }
+            .deep-think-btn {
+                padding: 10px 20px; /* Revert padding */
+                border-radius: 25px; /* Revert radius */
+                gap: 8px; /* Revert gap */
+                font-size: 14px; /* Revert font size */
+            }
+            .deep-think-btn:hover {
+                transform: translateY(-2px); /* Revert hover effect */
+                box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4); /* Revert shadow */
+            }
+            .chat-messages {
+                padding: 20px; /* Revert padding */
+            }
+            .message {
+                margin-bottom: 20px; /* Revert margin */
+                gap: 15px; /* Revert gap */
+            }
+            .message-avatar {
+                width: 40px; /* Revert size */
+                height: 40px; /* Revert size */
+                font-size: 16px; /* Revert font size */
+            }
+            .message-content {
+                padding: 15px 20px; /* Revert padding */
+                border-radius: 18px; /* Revert radius */
+                max-width: 80%; /* Revert width */
+                font-size: 16px; /* Revert font size */
+            }
+            .thinking-process {
+                border-radius: 10px; /* Revert radius */
+                padding: 15px; /* Revert padding */
+                margin-bottom: 15px; /* Revert margin */
+                font-size: 13px; /* Revert font size */
+                line-height: 1.6; /* Revert line height */
+            }
+            .thinking-process h4 {
+                margin-bottom: 10px; /* Revert margin */
+                font-size: 14px; /* Revert font size */
+            }
+            .code-block {
+                border-radius: 8px; /* Revert radius */
+                padding: 15px; /* Revert padding */
+                margin: 10px 0; /* Revert margin */
+            }
+            .code-header {
+                margin-bottom: 10px; /* Revert margin */
+                padding-bottom: 8px; /* Revert padding */
+            }
+            .code-language {
+                font-size: 12px; /* Revert font size */
+            }
+            .copy-btn {
+                padding: 5px 10px; /* Revert padding */
+                border-radius: 5px; /* Revert radius */
+                font-size: 12px; /* Revert font size */
+            }
+            .code-content {
+                font-size: 14px; /* Revert font size */
+                line-height: 1.5; /* Revert line height */
+            }
+            .chat-input {
+                padding: 20px; /* Revert padding */
+                order: 3; /* Keep order */
+            }
+            .input-container {
+                gap: 15px; /* Revert gap */
+            }
+            #messageInput {
+                padding: 15px 20px; /* Revert padding */
+                border-radius: 25px; /* Revert radius */
+                font-size: 16px; /* Revert font size */
+                min-height: 50px; /* Revert height */
+                max-height: 120px; /* Revert height */
+                line-height: 1.5; /* Revert line height */
+            }
+            #messageInput:focus {
+                box-shadow: 0 0 10px rgba(78, 205, 196, 0.3); /* Revert shadow */
+            }
+            .send-btn {
+                padding: 0 25px; /* Revert padding */
+                border-radius: 25px; /* Revert radius */
+                gap: 8px; /* Revert gap */
+                font-size: 14px; /* Revert font size */
+                height: 50px; /* Match input height */
+            }
+             .send-btn:hover {
+                transform: translateY(-2px); /* Revert hover effect */
+                box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4); /* Revert shadow */
+            }
+            .loading {
+                width: 20px; /* Revert size */
+                height: 20px; /* Revert size */
+            }
+            .api-status {
+                border-radius: 8px; /* Revert radius */
+                padding: 10px; /* Revert padding */
+                margin-bottom: 15px; /* Revert margin */
+                font-size: 12px; /* Revert font size */
+            }
+            .api-item {
+                padding: 5px 0; /* Revert padding */
+            }
+            .api-status-indicator {
+                width: 8px; /* Revert size */
+                height: 8px; /* Revert size */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <h1>AI Cute</h1>
+            </div>
+            <div class="config-section">
+                <h3>API Status</h3>
+                <div class="api-status" id="apiStatusContainer">
+                    <!-- API status will be loaded here by JS -->
+                    <div class="api-item"><span>Loading API status...</span></div>
+                </div>
+            </div>
+             <div class="config-section">
+                <h3>Settings</h3>
+                <div class="input-group">
+                    <label for="tempInput">Temperature</label>
+                    <input type="number" id="tempInput" step="0.1" value="0.7" placeholder="e.g., 0.7">
+                 </div>
+                 <!-- Add more settings if needed -->
+            </div>
+            <div class="version-display" id="versionInfo">
+                Loading version...
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-header">
+                <div class="chat-title">AI Cute Chatbot</div>
+                <button class="deep-think-btn" id="deepThinkToggle">
+                    
+                    <span>
+                        🧠 Deep Think: OFF
+                    </span>
+                </button>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Chat messages will appear here -->
+                <div class="message ai">
+                    <div class="message-avatar">AI</div>
+                    <div class="message-content">
+                        Xin chào! Tôi là AI Cute. Bạn cần giúp gì hôm nay?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <div class="input-container">
+                    <textarea id="messageInput" placeholder="Nhập tin nhắn của bạn..." rows="1"></textarea>
+                    <button class="send-btn" id="sendButton">
+                        <span>Gửi</span>
+                        <!-- Add SVG icon for send if desired -->
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts - IMPORTANT: Replace YOUR_USERNAME and YOUR_REPO with your actual GitHub username and repository name -->
+    <script src="api-config.js"></script>
+    <script src="knowledge-base.js"></script>
+    <script src="version.js"></script>
+    <!-- Main application logic -->
+    <script src="app.js"></script>
+</body>
