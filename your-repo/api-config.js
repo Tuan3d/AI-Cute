@@ -12,7 +12,7 @@ const API_CONFIG = {
     // Danh sách các Gemini API Keys
     // Thêm API key mới vào cuối mảng này
     GEMINI_API_KEYS: [
-        "YOUR_GEMINI_API_KEY_1_HERE",
+        "AIzaSyClbg_DdnIiKHdpHiPoQD7Q5Qn3G3b47D8",
         "YOUR_GEMINI_API_KEY_2_HERE", 
         "YOUR_GEMINI_API_KEY_3_HERE",
         // Thêm API keys mới ở đây
